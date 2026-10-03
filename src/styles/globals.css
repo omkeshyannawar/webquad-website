@@ -6,6 +6,7 @@
 
 html {
   min-width: 320px;
+  overflow-x: clip;
   background: var(--color-paper);
   scroll-behavior: smooth;
 }
@@ -13,6 +14,7 @@ html {
 body {
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: clip;
   margin: 0;
   color: var(--color-ink);
   font-family: "DM Sans", sans-serif;

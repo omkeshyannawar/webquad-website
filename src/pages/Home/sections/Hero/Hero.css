@@ -34,7 +34,7 @@
   z-index: 2;
 
   width: min(100%, 1400px);
-  min-height: 100svh;
+  height: 100svh;
 
   margin-inline: auto;
 
@@ -42,7 +42,7 @@
   flex-direction: column;
   justify-content: center;
 
-  padding: 8rem var(--gutter) 7rem;
+  padding: 6rem var(--gutter) 5rem;
 }
 
 /* --------------------------------
@@ -73,17 +73,65 @@
 
   font-family: var(--font-display);
 
-  font-size: clamp(4.5rem, 9.5vw, 9.5rem);
+  font-size: clamp(4rem, 8.5vw, 8.5rem);
 
   font-weight: 500;
 
-  line-height: 0.86;
+  line-height: 0.88;
 
   letter-spacing: -0.075em;
 
   text-wrap: balance;
 }
 
+/* --------------------------------
+   GRADIENT TEXT
+-------------------------------- */
+
+/* --------------------------------
+   GRADIENT TEXT EFFECT
+-------------------------------- */
+/* --------------------------------
+   GRADIENT TEXT EFFECT
+-------------------------------- */
+
+.hero__gradient-text {
+  display: inline-block;
+
+  background: linear-gradient(
+    110deg,
+    #2457d6 0%,
+    #3f73ff 25%,
+    #8eb0ff 50%,
+    #3f73ff 75%,
+    #2457d6 100%
+  );
+
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  animation: heroTextShimmer 3.5s ease-in-out infinite;
+}
+
+@keyframes heroTextShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
 /* --------------------------------
    DESCRIPTION + CTA
 -------------------------------- */
@@ -96,7 +144,7 @@
 
   gap: 3rem;
 
-  margin-top: 4rem;
+  margin-top: 3rem;
 }
 
 .hero__description {
@@ -153,6 +201,7 @@
 
   left: var(--gutter);
   right: var(--gutter);
+
   bottom: 1.5rem;
 
   z-index: 3;
@@ -180,7 +229,7 @@
 
 @media (max-width: 800px) {
   .hero__content {
-    padding: 7rem var(--gutter) 7rem;
+    padding: 7rem var(--gutter) 5rem;
   }
 
   .hero__title {
@@ -194,7 +243,7 @@
 
     gap: 2rem;
 
-    margin-top: 3rem;
+    margin-top: 2.5rem;
   }
 
   .hero__description {
@@ -208,7 +257,7 @@
 
 @media (max-width: 520px) {
   .hero__content {
-    padding-top: 6.5rem;
+    padding-top: 5.5rem;
   }
 
   .hero__eyebrow {
@@ -216,7 +265,7 @@
   }
 
   .hero__title {
-    font-size: clamp(3.25rem, 16vw, 5rem);
+    font-size: clamp(3rem, 14vw, 4.5rem);
   }
 
   .hero__description {
@@ -239,6 +288,10 @@
 @media (prefers-reduced-motion: reduce) {
   .hero__canvas {
     opacity: 0.7;
+  }
+
+  .hero__gradient-text {
+    animation: none;
   }
 
   .hero__cta {

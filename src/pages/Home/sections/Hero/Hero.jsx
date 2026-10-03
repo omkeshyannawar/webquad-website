@@ -23,7 +23,6 @@ export default function Hero() {
     if (!hero || !canvas) return;
 
     const ctx = canvas.getContext("2d");
-
     if (!ctx) return;
 
     const reducedMotion = window.matchMedia(
@@ -55,10 +54,8 @@ export default function Hero() {
           points.push({
             baseX: x / GRID_X,
             baseY: y / GRID_Y,
-
             x: x / GRID_X,
             y: y / GRID_Y,
-
             velocityX: 0,
             velocityY: 0,
           });
@@ -72,10 +69,7 @@ export default function Hero() {
       width = rect.width;
       height = rect.height;
 
-      dpr = Math.min(
-        window.devicePixelRatio || 1,
-        1.5
-      );
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
       canvas.width = width * dpr;
       canvas.height = height * dpr;
@@ -83,14 +77,7 @@ export default function Hero() {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
-      ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-      );
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       createPoints();
 
@@ -121,7 +108,6 @@ export default function Hero() {
 
     const handlePointerLeave = () => {
       pointer.active = false;
-
       pointer.velocityX = 0;
       pointer.velocityY = 0;
     };
@@ -135,10 +121,6 @@ export default function Hero() {
         pointer.velocityX ** 2 +
           pointer.velocityY ** 2
       );
-
-      /*
-       * Keep cursor influence controlled.
-       */
 
       const velocityX = Math.max(
         -25,
@@ -161,16 +143,6 @@ export default function Hero() {
           dx * dx + dy * dy
         );
 
-        /*
-         * ----------------------------------------
-         * LOCAL CURSOR INFLUENCE
-         * ----------------------------------------
-         *
-         * Outside this radius:
-         *
-         * absolutely no cursor force.
-         */
-
         if (
           pointer.active &&
           distance < POINTER_RADIUS
@@ -178,22 +150,10 @@ export default function Hero() {
           const normalizedDistance =
             distance / POINTER_RADIUS;
 
-          /*
-           * Smooth falloff.
-           *
-           * Center = strong
-           * Edge   = almost zero
-           */
-
           const falloff =
             1 -
             normalizedDistance *
               normalizedDistance;
-
-          /*
-           * Faster cursor = stronger push.
-           * But capped so it never explodes.
-           */
 
           const speedFactor = Math.min(
             speed / 30,
@@ -204,11 +164,6 @@ export default function Hero() {
             falloff *
             speedFactor *
             POINTER_FORCE;
-
-          /*
-           * Push in the direction
-           * the cursor is moving.
-           */
 
           point.velocityX +=
             velocityX *
@@ -221,23 +176,8 @@ export default function Hero() {
             0.0008;
         }
 
-        /*
-         * ----------------------------------------
-         * LOCAL VELOCITY
-         * ----------------------------------------
-         */
-
         point.velocityX *= VELOCITY_DAMPING;
         point.velocityY *= VELOCITY_DAMPING;
-
-        /*
-         * ----------------------------------------
-         * RETURN TO ORIGINAL POSITION
-         * ----------------------------------------
-         *
-         * This is deliberately strong.
-         * The affected area returns quickly.
-         */
 
         point.x += point.velocityX;
         point.y += point.velocityY;
@@ -250,11 +190,6 @@ export default function Hero() {
           (point.baseY - point.y) *
           RETURN_SPEED;
       }
-
-      /*
-       * Cursor velocity disappears quickly
-       * when the cursor stops.
-       */
 
       pointer.velocityX *= 0.7;
       pointer.velocityY *= 0.7;
@@ -277,11 +212,8 @@ export default function Hero() {
         i < linePoints.length;
         i += 1
       ) {
-        const previous =
-          linePoints[i - 1];
-
-        const current =
-          linePoints[i];
+        const previous = linePoints[i - 1];
+        const current = linePoints[i];
 
         const previousX =
           previous.x * width;
@@ -328,10 +260,6 @@ export default function Hero() {
         height
       );
 
-      /*
-       * Horizontal lines
-       */
-
       ctx.lineWidth = 0.7;
 
       ctx.strokeStyle =
@@ -356,10 +284,6 @@ export default function Hero() {
 
         drawLine(row);
       }
-
-      /*
-       * Vertical lines
-       */
 
       ctx.strokeStyle =
         "rgba(243, 241, 236, 0.15)";
@@ -452,11 +376,17 @@ export default function Hero() {
         </p>
 
         <h1 className="hero__title">
-          We build
+          Give your{" "}
+          <span className="hero__gradient-text">
+            ideas
+          </span>
           <br />
-          digital products
+          the digital{" "}
+          <span className="hero__gradient-text">
+            home
+          </span>
           <br />
-          that move.
+          they deserve.
         </h1>
 
         <div className="hero__bottom">
@@ -475,11 +405,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="hero__footer">
-        <span>Websites</span>
-        <span>Products</span>
-        <span>Applications</span>
-      </div>
+      {/* Hero footer intentionally remains disabled */}
     </section>
   );
 }
