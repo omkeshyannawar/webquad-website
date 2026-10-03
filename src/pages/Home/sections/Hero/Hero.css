@@ -1,0 +1,247 @@
+.hero {
+  position: relative;
+
+  min-height: 100svh;
+
+  overflow: hidden;
+
+  background: #0a0a0a;
+  color: #f3f1ec;
+}
+
+/* --------------------------------
+   FLUID CANVAS
+-------------------------------- */
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  pointer-events: none;
+}
+
+/* --------------------------------
+   HERO CONTENT
+-------------------------------- */
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 1400px);
+  min-height: 100svh;
+
+  margin-inline: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 8rem var(--gutter) 7rem;
+}
+
+/* --------------------------------
+   EYEBROW
+-------------------------------- */
+
+.hero__eyebrow {
+  margin: 0 0 2.75rem;
+
+  color: #8d8d88;
+
+  font-size: 0.7rem;
+  font-weight: 500;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+/* --------------------------------
+   MAIN HEADING
+-------------------------------- */
+
+.hero__title {
+  max-width: 1050px;
+
+  margin: 0;
+
+  font-family: var(--font-display);
+
+  font-size: clamp(4.5rem, 9.5vw, 9.5rem);
+
+  font-weight: 500;
+
+  line-height: 0.86;
+
+  letter-spacing: -0.075em;
+
+  text-wrap: balance;
+}
+
+/* --------------------------------
+   DESCRIPTION + CTA
+-------------------------------- */
+
+.hero__bottom {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 3rem;
+
+  margin-top: 4rem;
+}
+
+.hero__description {
+  max-width: 34rem;
+
+  margin: 0;
+
+  color: #a6a39c;
+
+  font-size: 1rem;
+
+  line-height: 1.6;
+}
+
+/* --------------------------------
+   CTA
+-------------------------------- */
+
+.hero__cta {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 10rem;
+
+  padding: 1rem 1.5rem;
+
+  background: #f3f1ec;
+  color: #0a0a0a;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    transform 300ms ease,
+    background-color 300ms ease;
+}
+
+.hero__cta:hover {
+  background: #ffffff;
+
+  transform: translateY(-3px);
+}
+
+/* --------------------------------
+   BOTTOM META
+-------------------------------- */
+
+.hero__footer {
+  position: absolute;
+
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 1.5rem;
+
+  z-index: 3;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding-top: 1rem;
+
+  border-top: 1px solid #292929;
+
+  color: #70706c;
+
+  font-size: 0.65rem;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+/* --------------------------------
+   TABLET
+-------------------------------- */
+
+@media (max-width: 800px) {
+  .hero__content {
+    padding: 7rem var(--gutter) 7rem;
+  }
+
+  .hero__title {
+    font-size: clamp(3.8rem, 15vw, 6rem);
+  }
+
+  .hero__bottom {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 2rem;
+
+    margin-top: 3rem;
+  }
+
+  .hero__description {
+    max-width: 28rem;
+  }
+}
+
+/* --------------------------------
+   MOBILE
+-------------------------------- */
+
+@media (max-width: 520px) {
+  .hero__content {
+    padding-top: 6.5rem;
+  }
+
+  .hero__eyebrow {
+    margin-bottom: 2rem;
+  }
+
+  .hero__title {
+    font-size: clamp(3.25rem, 16vw, 5rem);
+  }
+
+  .hero__description {
+    font-size: 0.92rem;
+  }
+
+  .hero__footer {
+    font-size: 0.55rem;
+  }
+
+  .hero__footer span:last-child {
+    display: none;
+  }
+}
+
+/* --------------------------------
+   REDUCED MOTION
+-------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__canvas {
+    opacity: 0.7;
+  }
+
+  .hero__cta {
+    transition: none;
+  }
+}

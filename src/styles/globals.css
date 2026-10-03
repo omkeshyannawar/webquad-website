@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--color-paper);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--color-ink);
+  font-family: "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+.home {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 9rem var(--gutter) 5rem;
+  background: linear-gradient(120deg, #e8eee8 0%, var(--color-paper) 62%);
+}
+
+.home__eyebrow {
+  margin: 0 0 1.25rem;
+  color: #47725f;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.home h1 {
+  max-width: 11ch;
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.98;
+}
+
+.home__intro {
+  max-width: 38rem;
+  margin: 1.5rem 0 2rem;
+  color: #47534e;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.home__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.15rem;
+  border-radius: 0.4rem;
+  background: var(--color-black);
+  color: var(--color-paper);
+  font-weight: 600;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .navbar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .navbar__menu,
+  .navbar__contact {
+    display: none;
+  }
+
+  .mobile-menu {
+    position: relative;
+    display: block;
+    justify-self: end;
+  }
+
+  .mobile-menu__toggle {
+    display: grid;
+    width: 2.75rem;
+    aspect-ratio: 1;
+    align-content: center;
+    justify-items: center;
+    gap: 0.35rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--color-black);
+    cursor: pointer;
+  }
+
+  .mobile-menu__toggle span {
+    width: 1.1rem;
+    height: 2px;
+    background: var(--color-paper);
+  }
+
+  .mobile-menu__panel:not([hidden]) {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    right: 0;
+    display: grid;
+    min-width: 12rem;
+    gap: 0.25rem;
+    padding: 0.65rem;
+    border-radius: 0.5rem;
+    background: var(--color-black);
+    color: var(--color-paper);
+  }
+
+  .mobile-menu__panel a {
+    padding: 0.7rem;
+  }
+}

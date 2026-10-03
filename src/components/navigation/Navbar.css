@@ -1,0 +1,605 @@
+/* =========================================
+   NAVBAR
+========================================= */
+
+.navbar {
+  /* Shape */
+  --nav-h: 3.5rem; /* shell height (desktop, top of page) */
+  --nav-ear: 1.4rem; /* size of the concave top curves */
+  --nav-radius: 1.25rem; /* bottom corner radius */
+  --nav-collapsed-w: 29rem; /* shell width before scrolling (desktop) */
+  --nav-pad: max(var(--gutter, 1.5rem), calc(var(--nav-ear) + 0.5rem));
+
+  /* Glass (black / beige / white / gray site) */
+  --glass-tint: rgba(14, 14, 14, 0.5);
+  --glass-tint-scrolled: rgba(14, 14, 14, 0.62);
+  --glass-sheen: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.505) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  --glass-blur: blur(20px) saturate(160%);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  z-index: 1000;
+
+  width: 100%;
+
+  padding: 0 var(--nav-pad);
+
+  pointer-events: none;
+ 
+}
+
+.navbar--scrolled {
+  --nav-h: 3.25rem;
+}
+
+/* =========================================
+   NAVBAR SHELL
+   The shell is an invisible full-width
+   layout box. The visible glass shape is
+   drawn by ::before, so it can grow from
+   a small centered bar into a full bar
+   while logo + button slide inside.
+========================================= */
+
+.navbar__shell {
+  position: relative;
+
+  width: min(100%, 1100px);
+  height: var(--nav-h);
+  margin-inline: auto;
+
+  pointer-events: none;
+
+  transition: height 450ms var(--ease);
+}
+
+/*
+ * Glass shape: body + rounded bottom corners
+ * + concave top "ears", all in ONE element
+ * (built with a union of mask layers) so the
+ * blur has no seams.
+ */
+.navbar__shell::before {
+  --e: var(--nav-ear);
+  --r: var(--nav-radius);
+
+  content: "";
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  /* Collapsed: small centered bar */
+  left: calc((100% - min(var(--nav-collapsed-w), 100%)) / 2 - var(--e));
+  right: calc((100% - min(var(--nav-collapsed-w), 100%)) / 2 - var(--e));
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  background-color: var(--glass-tint);
+  background-image: var(--glass-sheen);
+
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+
+  --mask-img:
+    /* top + middle body */
+    linear-gradient(#000, #000),
+    /* bottom middle */ linear-gradient(#000, #000),
+    /* bottom-left rounded corner */
+    radial-gradient(
+        circle at 100% 0,
+        #000 calc(var(--r) - 0.5px),
+        transparent var(--r)
+      ),
+    /* bottom-right rounded corner */
+    radial-gradient(
+        circle at 0 0,
+        #000 calc(var(--r) - 0.5px),
+        transparent var(--r)
+      ),
+    /* left concave ear */
+    radial-gradient(
+        circle at 0 100%,
+        transparent calc(var(--e) - 0.5px),
+        #000 var(--e)
+      ),
+    /* right concave ear */
+    radial-gradient(
+        circle at 100% 100%,
+        transparent calc(var(--e) - 0.5px),
+        #000 var(--e)
+      );
+
+  --mask-size:
+    calc(100% - 2 * var(--e)) calc(100% - var(--r) + 1px),
+    calc(100% - 2 * var(--e) - 2 * var(--r) + 2px) var(--r), var(--r) var(--r),
+    var(--r) var(--r), calc(var(--e) + 1px) var(--e),
+    calc(var(--e) + 1px) var(--e);
+
+  --mask-pos:
+    var(--e) 0, calc(var(--e) + var(--r) - 1px) 100%, var(--e) 100%,
+    calc(100% - var(--e)) 100%, 0 0, 100% 0;
+
+  -webkit-mask-image: var(--mask-img);
+  mask-image: var(--mask-img);
+
+  -webkit-mask-size: var(--mask-size);
+  mask-size: var(--mask-size);
+
+  -webkit-mask-position: var(--mask-pos);
+  mask-position: var(--mask-pos);
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  transition:
+    left 450ms var(--ease),
+    right 450ms var(--ease),
+    background-color 350ms ease;
+}
+
+/* No backdrop-filter support: fall back to a solid bar */
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .navbar__shell::before {
+    background-color: rgba(14, 14, 14, 0.94);
+  }
+}
+
+/* =========================================
+   LOGO
+   Top of page: outside the shell (left edge)
+   Scrolled: slides inside the shell
+========================================= */
+
+.navbar__logo {
+  position: absolute;
+
+  top: 50%;
+  left: 0;
+
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+
+  transform: translateY(-50%);
+
+  pointer-events: auto;
+
+  text-decoration: none;
+
+  transition: left 450ms var(--ease);
+}
+
+.navbar__logo img {
+  display: block;
+
+  width: auto;
+  height: 2.25rem;
+
+  max-width: 100%;
+
+  object-fit: contain;
+
+  transition: height 450ms var(--ease);
+}
+
+/* =========================================
+   CENTER NAVIGATION
+========================================= */
+
+.navbar__links {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  z-index: 4;
+
+  display: flex;
+  align-items: center;
+
+  gap: 1.9rem;
+
+  padding: 0.8rem 1.6rem;
+
+  transform: translate(-50%, -50%);
+
+  background: transparent;
+
+  pointer-events: auto;
+
+  white-space: nowrap;
+}
+
+.navbar__links a {
+  display: block;
+
+  color: rgba(243, 241, 236, 0.78);
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  text-decoration: none;
+
+  transition: color 250ms ease;
+}
+
+.navbar__links a:hover {
+  color: #ffffff;
+}
+
+.navbar__links a:focus-visible,
+.navbar__logo:focus-visible,
+.navbar__contact:focus-visible,
+.navbar__menu-button:focus-visible {
+  outline: 2px solid #f3f1ec;
+  outline-offset: 4px;
+  border-radius: 0.4rem;
+}
+
+/* =========================================
+   CONTACT BUTTON
+   Top of page: outside the shell (right edge)
+   Scrolled: slides inside the shell
+========================================= */
+
+.navbar__contact {
+  position: absolute;
+
+  top: 50%;
+  right: 0;
+
+  z-index: 5;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%);
+
+  padding: 0.8rem 1.3rem;
+
+  background: #f3f1ec;
+
+  color: #0a0a0a;
+
+  border-radius: 0.75rem;
+
+  font-size: 0.88rem;
+  font-weight: 600;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  text-decoration: none;
+
+  pointer-events: auto;
+
+  transition:
+    right 450ms var(--ease),
+    transform 300ms ease,
+    background-color 300ms ease;
+}
+
+.navbar__contact:hover {
+  background: #ffffff;
+
+  transform: translateY(-50%) translateY(-2px);
+}
+
+/* =========================================
+   MOBILE MENU BUTTON (three lines)
+   Lines 2 + 3 are the two <span>s,
+   line 1 is the ::before. No JSX change.
+========================================= */
+
+.navbar__menu-button {
+  display: none;
+
+  position: absolute;
+
+  top: 50%;
+  right: 0.5rem;
+
+  z-index: 6;
+
+  width: 2.75rem;
+  height: 2.75rem;
+
+  padding: 0;
+
+  transform: translateY(-50%);
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  pointer-events: auto;
+}
+
+.navbar__menu-button::before,
+.navbar__menu-button span {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  display: block;
+
+  width: 1.5rem;
+  height: 2px;
+
+  margin: -1px 0 0 -0.75rem;
+
+  border-radius: 2px;
+
+  background: rgba(243, 241, 236, 0.72);
+
+  transition:
+    transform 300ms var(--ease),
+    opacity 200ms ease,
+    background-color 200ms ease;
+}
+
+.navbar__menu-button::before {
+  content: "";
+
+  transform: translateY(-7px);
+}
+
+.navbar__menu-button span:first-child {
+  transform: translateY(0);
+}
+
+.navbar__menu-button span:last-child {
+  transform: translateY(7px);
+}
+
+.navbar__menu-button:hover::before,
+.navbar__menu-button:hover span {
+  background: #ffffff;
+}
+
+.navbar__menu-button.is-open::before {
+  opacity: 0;
+
+  transform: translateY(0) scaleX(0.3);
+}
+
+.navbar__menu-button.is-open span:first-child {
+  transform: rotate(45deg);
+}
+
+.navbar__menu-button.is-open span:last-child {
+  transform: rotate(-45deg);
+}
+
+/* =========================================
+   SCROLLED NAVBAR (desktop)
+   Glass bar grows to full width and the
+   logo + button slide inside it.
+========================================= */
+
+.navbar--scrolled .navbar__shell::before {
+  left: calc(-1 * var(--nav-ear));
+  right: calc(-1 * var(--nav-ear));
+
+  background-color: var(--glass-tint-scrolled);
+}
+
+.navbar--scrolled .navbar__logo {
+  left: 1.1rem;
+}
+
+.navbar--scrolled .navbar__logo img {
+  height: 2rem;
+}
+
+.navbar--scrolled .navbar__contact {
+  right: 0.55rem;
+}
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+.navbar__mobile {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -1;
+
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 1.2rem;
+
+  padding: 6rem var(--gutter, 1.5rem);
+
+  background: rgba(10, 10, 10, 0.92);
+
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity 350ms ease,
+    visibility 350ms ease;
+}
+
+.navbar__mobile.is-open {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+.navbar__mobile a {
+  color: #f3f1ec;
+
+  font-family: var(--font-display);
+
+  font-size: clamp(2.5rem, 9vw, 4rem);
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: -0.05em;
+
+  text-decoration: none;
+}
+
+/* =========================================
+   TABLET + MOBILE
+   Attached glass bar with concave ears,
+   logo left, three-line menu right.
+========================================= */
+
+@media (max-width: 899px) {
+  .navbar,
+  .navbar--scrolled {
+    --nav-h: 3.75rem;
+  }
+
+  .navbar__shell {
+    width: min(100%, 33rem);
+  }
+
+  /* Same full-width glass shape, collapsed or scrolled */
+  .navbar__shell::before,
+  .navbar--scrolled .navbar__shell::before {
+    left: calc(-1 * var(--nav-ear));
+    right: calc(-1 * var(--nav-ear));
+
+    background-color: var(--glass-tint-scrolled);
+  }
+
+  .navbar__logo,
+  .navbar--scrolled .navbar__logo {
+    left: 1rem;
+  }
+
+  .navbar__logo img,
+  .navbar--scrolled .navbar__logo img {
+    height: 2.1rem;
+
+    max-width: 9rem;
+  }
+
+  .navbar__links,
+  .navbar__contact {
+    display: none;
+  }
+
+  .navbar__menu-button {
+    display: block;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .navbar {
+    --nav-ear: 1.3rem;
+    --nav-radius: 1.2rem;
+  }
+
+  .navbar,
+  .navbar--scrolled {
+    --nav-h: 3.5rem;
+  }
+
+  .navbar__logo,
+  .navbar--scrolled .navbar__logo {
+    left: 0.85rem;
+  }
+
+  .navbar__logo img,
+  .navbar--scrolled .navbar__logo img {
+    max-width: 8rem;
+
+    height: auto;
+    max-height: 1.85rem;
+  }
+
+  .navbar__menu-button {
+    right: 0.35rem;
+  }
+}
+
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
+
+@media (max-width: 360px) {
+  .navbar,
+  .navbar--scrolled {
+    --nav-h: 3.25rem;
+  }
+
+  .navbar__logo,
+  .navbar--scrolled .navbar__logo {
+    left: 0.7rem;
+  }
+
+  .navbar__logo img,
+  .navbar--scrolled .navbar__logo img {
+    max-width: 7rem;
+  }
+
+  .navbar__menu-button::before,
+  .navbar__menu-button span {
+    width: 1.3rem;
+
+    margin-left: -0.65rem;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar__shell,
+  .navbar__shell::before,
+  .navbar__logo,
+  .navbar__logo img,
+  .navbar__contact,
+  .navbar__menu-button::before,
+  .navbar__menu-button span,
+  .navbar__mobile {
+    transition: none;
+  }
+}

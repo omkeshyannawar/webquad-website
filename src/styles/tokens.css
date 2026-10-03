@@ -1,0 +1,10 @@
+:root {
+  color-scheme: light;
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+  --color-black: #182522;
+  --color-ink: #182522;
+  --color-paper: #f7f7f2;
+  --color-off-white: #e8eee8;
+  --color-muted: #a9c4b7;
+  --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
